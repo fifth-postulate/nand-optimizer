@@ -83,7 +83,8 @@ And finally expanding the NOTs leaves with
 expression will have to wait until a computer can do it for us
 ```
 
-and a head ache
+and a headache.
+
 [wikipedia:nand-gate]: https://en.wikipedia.org/wiki/NAND_gate
 [wikipedia:truth-table]: https://en.wikipedia.org/wiki/Truth_table
 [wikipedia:de-morgans-laws]: https://en.wikipedia.org/wiki/De_Morgan%27s_laws
