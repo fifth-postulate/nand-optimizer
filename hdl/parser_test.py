@@ -1,5 +1,4 @@
 import hdl.parser as hdl
-from parser.parser_test import assert_unique_parse
 
 def test_parser():
     parser = hdl.parser()
