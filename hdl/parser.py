@@ -1,11 +1,10 @@
 from parser.kernel import Any, Map, Predicate, Sequence, Word, complete, many
+from parser.sugar import intersperse
 
 def parser():
-    return complete(Map(lambda result: (result[2], result[4]), Sequence([
+    return complete(Map(lambda result: (result[2], result[4]), intersperse(whitespace(), [
         keyword('CHIP'),
-        whitespace(),
         name(),
-        whitespace(),
         body()
     ])))
 
@@ -35,13 +34,10 @@ def alphanumeric():
     return Predicate(lambda character: character.isalnum())
 
 def body():
-    return Map(lambda result: (result[2], result[4]), Sequence([
+    return Map(lambda result: (result[2], result[4]), intersperse(whitespace(), [
         Word('{'),
-        whitespace(),
         pins(),
-        whitespace(),
         implementation(),
-        whitespace(),
         Word('}')
     ]))
 
@@ -110,10 +106,8 @@ def connections():
     ]))
 
 def connection():
-    return Map(lambda result: (result[0], result[4]), Sequence([
+    return Map(lambda result: (result[0], result[4]), intersperse(whitespace(), [
         name(),
-        whitespace(),
         Word('='),
-        whitespace(),
         name(),
     ]))
