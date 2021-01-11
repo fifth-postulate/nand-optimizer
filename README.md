@@ -98,6 +98,12 @@ and activate it with
 source .venv/bin/activate
 ```
 
+Then install the dependencies with
+
+```shell
+pip install -r requirements.txt
+```
+
 [wikipedia:nand-gate]: https://en.wikipedia.org/wiki/NAND_gate
 [wikipedia:truth-table]: https://en.wikipedia.org/wiki/Truth_table
 [wikipedia:de-morgans-laws]: https://en.wikipedia.org/wiki/De_Morgan%27s_laws
