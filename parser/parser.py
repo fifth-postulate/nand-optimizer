@@ -1,0 +1,67 @@
+class Parser:
+    def __init__(self):
+        pass
+    
+    def parse(self, record):
+        raise NotImplementedError('the parse method should be implemented by subclasses')
+
+class Word(Parser):
+    def __init__(self, word):
+        super().__init__()
+        self.word = word
+
+    def parse(self, record):
+        if record.startswith(self.word):
+            return [(self.word[:], record[len(self.word):])]
+        else:
+            return []
+
+class Any(Parser):
+    def __init__(self, parsers):
+        super().__init__()
+        self.parsers = parsers
+
+    def parse(self, record):
+        return [(result, rest) for parser in self.parsers for (result, rest) in parser.parse(record)]
+
+class Sequence(Parser):
+    def __init__(self, parsers):
+        super().__init__()
+        self.parsers = parsers
+
+    def parse(self, record):
+        return parse_sequence(self.parsers, record)
+
+def parse_sequence(parsers, record):
+    if not parsers:
+        return [([], record)]
+    else:
+        parser = parsers[0]
+        return [([intermediate_result] + result, rest) for (intermediate_result, intermediate_rest) in parser.parse(record) for (result, rest) in parse_sequence(parsers[1:], intermediate_rest)]
+
+class Map(Parser):
+    def __init__(self, transform, parser):
+        super().__init__()
+        self.parser = parser
+        self.transform = transform
+
+    def parse(self, record):
+        return [(self.transform(result), rest) for (result, rest) in self.parser.parse(record)]
+
+class Lazy(Parser):
+    def __init__(self, parser_producer):
+        super().__init__()
+        self.parser_producer = parser_producer
+
+    def parse(self, record):
+        parser = self.parser_producer()
+        return parser.parse(record)
+
+class Complete(Parser):
+    def __init__(self, parser):
+        super().__init__()
+        self.parser = parser
+
+    def parse(self, record):
+        return [(result, rest) for (result, rest) in self.parser.parse(record) if rest == '']
+
