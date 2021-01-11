@@ -5,6 +5,24 @@ class Parser:
     def parse(self, record):
         raise NotImplementedError('the parse method should be implemented by subclasses')
 
+class Success(Parser):
+    def __init__(self):
+        super().__init__()
+
+    def parse(self, record):
+        return [('', record)]
+
+class Predicate(Parser):
+    def __init__(self, predicate):
+        super().__init__()
+        self.predicate = predicate
+
+    def parse(self, record):
+        if len(record) > 0 and self.predicate(record[0]):
+            return [(record[0], record[1:])]
+        else:
+            return []
+
 class Word(Parser):
     def __init__(self, word):
         super().__init__()
@@ -57,11 +75,23 @@ class Lazy(Parser):
         parser = self.parser_producer()
         return parser.parse(record)
 
-class Complete(Parser):
-    def __init__(self, parser):
+class Filter(Parser):
+    def __init__(self, predicate, parser):
         super().__init__()
+        self.predicate = predicate
         self.parser = parser
 
     def parse(self, record):
-        return [(result, rest) for (result, rest) in self.parser.parse(record) if rest == '']
+        return [(result, rest) for (result, rest) in self.parser.parse(record) if self.predicate((result, rest))]
 
+def complete(parser):
+    return Filter(lambda pair: pair[1] == '', parser)
+
+def many(parser):
+    return Any([
+        Map(lambda result: [result[0]] + result[1], Sequence([parser, Lazy(lambda : many(parser))])),
+        Map(lambda result: [], Success()),
+    ])
+
+def atleast(number, parser):
+    return Filter(lambda pair: len(pair[0]) >= 2, many(parser))
