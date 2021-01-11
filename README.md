@@ -85,6 +85,19 @@ expression will have to wait until a computer can do it for us
 
 and a headache.
 
+## Development
+Development is done in Python. Make sure to create a virtual environment
+
+```shell
+python3 -m venv .venv
+```
+
+and activate it with
+
+```shell
+source .venv/bin/activate
+```
+
 [wikipedia:nand-gate]: https://en.wikipedia.org/wiki/NAND_gate
 [wikipedia:truth-table]: https://en.wikipedia.org/wiki/Truth_table
 [wikipedia:de-morgans-laws]: https://en.wikipedia.org/wiki/De_Morgan%27s_laws
