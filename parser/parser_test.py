@@ -1,4 +1,4 @@
-from parser.parser import Any, Filter, Map, Predicate, Sequence, Success, Word, atleast, many
+from parser.kernel import Any, Filter, Map, Predicate, Sequence, Success, Word, atleast, many
 
 def assert_unique_parse(parses, expected_result, expected_rest):
     assert len(parses) == 1

@@ -1,4 +1,4 @@
-from parser.parser import Any, Map, Predicate, Sequence, Word, complete, many
+from parser.kernel import Any, Map, Predicate, Sequence, Word, complete, many
 
 def parser():
     return complete(Map(lambda result: (result[2], result[4]), Sequence([
