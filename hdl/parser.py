@@ -1,7 +1,10 @@
-from parser.kernel import Any, Map, Predicate, Sequence, Word, complete, many
+from parser.kernel import Any, Avoid, Chain, Lazy, Map, Predicate, Sequence, Word, complete, many, optionally
 from parser.sugar import intersperse
 
 def parser():
+    return Chain(non_comment(), chip())
+
+def chip():
     return complete(Map(lambda result: (result[2], result[4]), intersperse(whitespace(), [
         keyword('CHIP'),
         name(),
@@ -111,3 +114,33 @@ def connection():
         Word('='),
         name(),
     ]))
+
+def non_comment():
+    return Map(lambda result: ''.join(result), complete(many(Any([
+        block_comment(),
+        line_comment(),
+        any_character(),
+    ]))))
+
+def block_comment():
+    return ignore(Sequence([
+        Word('/*'),
+        Avoid('*/'),
+        Word('*/'),
+    ]))
+
+def line_comment():
+    return ignore(Sequence([
+        Word('//'),
+        many(not_newline()),
+        optionally(newline()),       
+    ]))
+
+def not_newline():
+    return Predicate(lambda character: not character == '\n')
+
+def newline():
+    return Predicate(lambda character: character == '\n')
+
+def any_character():
+    return Predicate(lambda _: True)

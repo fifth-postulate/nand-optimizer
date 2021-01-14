@@ -1,10 +1,16 @@
-from parser.kernel import Any, Filter, Map, Predicate, Sequence, Success, Word, atleast, many
+from parser.kernel import Any, Avoid, Chain, Filter, Map, Predicate, Sequence, Success, Word, atleast, many, optionally
 
 def assert_unique_parse(parses, expected_result, expected_rest):
     assert len(parses) == 1
     (result, rest) = parses[0]
     assert result == expected_result
     assert rest == expected_rest
+
+def assert_longest_parse(parses, expected_result, expected_rest):
+    assert len(parses) > 0
+    (result, rest) = parses[0]
+    assert result == expected_result
+    assert rest == rest
 
 def assert_failed(parses):
     assert not parses
@@ -74,6 +80,27 @@ def test_filter():
     
     assert_unique_parse(parses, 'A', '')
 
+def test_avoid():
+    parser = Avoid('A!')
+
+    parses = parser.parse('BBBBBBBBBA!')
+
+    assert_unique_parse(parses, 'BBBBBBBBB', 'A!')
+
+def test_avoid_when_failing():
+    parser = Avoid('A!')
+
+    parses = parser.parse('A!')
+
+    assert_unique_parse(parses, '', 'A!')
+
+def test_chain():
+    parser = Chain(Word('ABC'), Word('A'))
+
+    parses = parser.parse('ABCD')
+
+    assert_unique_parse(parses, 'A', 'BCD')
+
 def test_many():
     parser = many(Word('A'))
 
@@ -93,3 +120,12 @@ def test_atleast():
     assert len(parses) == 2 
     assert parses[0] == (['A', 'A', 'A'], '')
     assert parses[1] == (['A', 'A'], 'A')
+
+def test_optionally():
+    parser = optionally(Word('A'))
+
+    parses = parser.parse('A')
+
+    assert len(parses) == 2 
+    assert parses[0] == ('A', '')
+    assert parses[1] == ('', 'A')
