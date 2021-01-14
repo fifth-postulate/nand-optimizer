@@ -1,4 +1,4 @@
-from parser.kernel import Any, Avoid, Chain, Lazy, Map, Predicate, Sequence, Word, complete, many, optionally
+from parser.kernel import Any, Avoid, Chain, Lazy, Map, Predicate, Producing, Sequence, Word, complete, many, optionally
 from parser.sugar import intersperse
 
 def parser():
@@ -125,7 +125,10 @@ def non_comment():
 def block_comment():
     return ignore(Sequence([
         Word('/*'),
-        Avoid('*/'),
+        optionally(many(Any([
+            Lazy(block_comment),
+            Producing(Avoid('*/'))
+        ]))),
         Word('*/'),
     ]))
 

@@ -1,4 +1,4 @@
-from parser.kernel import Any, Avoid, Chain, Filter, Map, Predicate, Sequence, Success, Word, atleast, many, optionally
+from parser.kernel import Any, Avoid, Chain, Filter, Map, Predicate, Producing, Sequence, Success, Word, atleast, many, optionally
 
 def assert_unique_parse(parses, expected_result, expected_rest):
     assert len(parses) == 1
@@ -100,6 +100,13 @@ def test_chain():
     parses = parser.parse('ABCD')
 
     assert_unique_parse(parses, 'A', 'BCD')
+
+def test_producing():
+    parser = Producing(many(Word('A')))
+
+    parses = parser.parse('')
+
+    assert_failed(parses)
 
 def test_many():
     parser = many(Word('A'))

@@ -104,6 +104,14 @@ class Chain(Parser):
     def parse(self, record):
         return [(result, second_rest + first_rest) for (intermediate, first_rest) in self.first.parse(record) for (result, second_rest) in self.second.parse(intermediate)]
 
+class Producing(Parser):
+    def __init__(self, parser):
+        super().__init__()
+        self.parser = parser
+
+    def parse(self, record):
+        return [(result, rest) for (result, rest) in self.parser.parse(record) if not rest == record]
+
 def complete(parser):
     return Filter(lambda pair: pair[1] == '', parser)
 

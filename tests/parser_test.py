@@ -67,6 +67,7 @@ def test_block_comment():
     
     parses = parser.parse("""/*
     this is a comment block
+    /* with a nested block */
     that is correctly parsed
     */""")
 
