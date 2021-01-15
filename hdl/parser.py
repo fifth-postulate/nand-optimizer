@@ -38,39 +38,42 @@ def alphanumeric():
 
 def body():
     return Map(lambda result: (result[2], result[4]), intersperse(whitespace(), [
-        Word('{'),
-        pins(),
+        bracket('{'),
+        interface(),
         implementation(),
-        Word('}')
+        bracket('}')
     ]))
 
-def pins():
+def bracket(form):
+    return Word(form)
+
+def interface():
     return Map(lambda result: (result[0], result[1]), Sequence([
-        input_pins(),
-        output_pins()
+        input_definitions(),
+        output_definitions()
     ]))
 
-def input_pins():
-    return pins_definition('IN')
+def input_definitions():
+    return interface_definitions('IN')
 
-def output_pins():
-    return pins_definition('OUT')
+def output_definitions():
+    return interface_definitions('OUT')
 
-def pins_definition(category):
+def interface_definitions(category):
     return Map(lambda result: [result[2]] + result[3], Sequence([
-        Word(category),
+        keyword(category),
         whitespace(),
-        pin(),
+        interface_definition(),
         many(Map(lambda df: df[3], Sequence([
             whitespace(),
             comma(),
             whitespace(),
-            pin(),
+            interface_definition(),
         ]))),
         whitespace(),
     ]))
 
-def pin():
+def interface_definition():
     return name()
 
 def comma():
@@ -87,11 +90,11 @@ def internal_chip_part():
     return Map(lambda result: (result[0], result[4]), Sequence([
         name(),
         whitespace(),
-        Word('('),
+        bracket('('),
         whitespace(),
         connections(),
         whitespace(),
-        Word(')'),
+        bracket(')'),
         whitespace(),
         Word(';'),
         whitespace(),
@@ -111,9 +114,12 @@ def connections():
 def connection():
     return Map(lambda result: (result[0], result[4]), intersperse(whitespace(), [
         name(),
-        Word('='),
+        assignment(),
         name(),
     ]))
+
+def assignment():
+    return Word('=')
 
 def non_comment():
     return Map(lambda result: ''.join(result), complete(many(Any([
