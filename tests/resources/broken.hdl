@@ -1,0 +1,4 @@
+/* this chip intentionally does not parse correctly */
+chip broken {
+    
+}
