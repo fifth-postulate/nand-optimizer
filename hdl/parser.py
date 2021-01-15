@@ -1,4 +1,4 @@
-from parser.kernel import Any, Avoid, Chain, Lazy, Map, Predicate, Producing, Sequence, Word, complete, many, optionally
+from parser.kernel import Any, Avoid, Chain, Lazy, Map, Predicate, Producing, Sequence, Word, atleast, complete, many, optionally
 from parser.sugar import intersperse
 
 def parser():
@@ -76,7 +76,27 @@ def interface_definitions(category):
     ]))
 
 def interface_definition():
-    return name()
+    return Any([
+        bus(),
+        pin(),
+    ])
+
+def bus():
+    return Map(lambda result: (result[0], result[2]), Sequence([
+        name(),
+        bracket('['),
+        number(),
+        bracket(']')
+    ]))
+
+def number():
+    return Map(lambda result: int(''.join(result)), atleast(1, digit()))
+
+def digit():
+    return Predicate(lambda character: character.isdigit())
+
+def pin():
+    return Map(lambda id: (id, 1), name())
 
 def comma():
     return Word(',')
