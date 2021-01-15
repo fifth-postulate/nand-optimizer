@@ -8,8 +8,8 @@ def test_parser():
     this is a or gate of with 4.
     */CHIP or4
     {
-        IN a, b, c, d
-        OUT out
+        IN a, b, c, d;
+        OUT out;
 
         PARTS:
         or (a=a, b=b, out=v0);
@@ -19,34 +19,6 @@ def test_parser():
 
     assert len(parses) > 0
     assert parses[0] == (('or4', ((['a', 'b', 'c', 'd'], ['out']), [('or', [('a', 'a'), ('b','b'), ('out','v0')]), ('or', [('a', 'c'), ('b','d'), ('out','v1')]), ('or', [('a', 'v0'), ('b','v1'), ('out','out')])])), '')
-
-def test_non_comment_on_larger_example():
-    parser = hdl.non_comment()
-
-    parses = parser.parse("""/*
-    this is a or gate of with 4.
-    */CHIP or4
-    {
-        IN a, b, c, d
-        OUT out
-
-        PARTS:
-        or (a=a, b=b, out=v0);
-        or (a=c, b=d, out=v1);
-        or (a=v0, b=v1, out=out);
-     }""")
-
-    assert len(parses) > 0
-    assert parses[0] == ("""CHIP or4
-    {
-        IN a, b, c, d
-        OUT out
-
-        PARTS:
-        or (a=a, b=b, out=v0);
-        or (a=c, b=d, out=v1);
-        or (a=v0, b=v1, out=out);
-     }""", '')
 
 def test_non_comment():
     parser = hdl.non_comment()

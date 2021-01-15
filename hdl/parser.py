@@ -71,6 +71,8 @@ def interface_definitions(category):
             interface_definition(),
         ]))),
         whitespace(),
+        colon(),
+        whitespace(),
     ]))
 
 def interface_definition():
@@ -78,6 +80,9 @@ def interface_definition():
 
 def comma():
     return Word(',')
+
+def colon():
+    return Word(';')
 
 def implementation():
     return Map(lambda result: result[2], Sequence([
@@ -96,7 +101,7 @@ def internal_chip_part():
         whitespace(),
         bracket(')'),
         whitespace(),
-        Word(';'),
+        colon(),
         whitespace(),
     ]))
 
