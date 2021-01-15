@@ -141,7 +141,7 @@ class Many(Parser):
         return parses
 
 def atleast(number, parser):
-    return Filter(lambda pair: len(pair[0]) >= 2, many(parser))
+    return Filter(lambda pair: len(pair[0]) >= number, many(parser))
 
 def optionally(parser):
     return Any([
