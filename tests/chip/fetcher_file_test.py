@@ -2,7 +2,7 @@ import os
 import pytest
 from chip.fetcher import FileFetcher, CouldNotParseChip, NonExistingChip
 
-definitions_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'resources'))
+definitions_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'resources'))
 
 def test_if_a_chip_is_unknown_an_NonExistingChip_exception_is_raised():
     fetcher = FileFetcher(definitions_path)
