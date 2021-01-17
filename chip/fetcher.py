@@ -1,5 +1,6 @@
 import os
 import hdl.parser as hdl 
+import chip.error as error
 from chip.blueprint import Builder
 
 class FileFetcher:
@@ -16,16 +17,6 @@ class FileFetcher:
                 if len(parses) > 0:
                     return parses[0][0]
                 else:
-                    raise CouldNotParseChip()
+                    raise error.CouldNotParseChip()
         else:
-            raise NonExistingChip()
-
-
-class ChipError(Exception):
-    pass
-
-class NonExistingChip(ChipError):
-    pass
-
-class CouldNotParseChip(ChipError):
-    pass
+            raise error.NonExistingChip()

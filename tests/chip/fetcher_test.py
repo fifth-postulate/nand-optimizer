@@ -1,6 +1,7 @@
 import os
 import pytest
-from chip.fetcher import FileFetcher, CouldNotParseChip, NonExistingChip
+from chip.error import CouldNotParseChip, NonExistingChip
+from chip.fetcher import FileFetcher
 
 definitions_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'resources'))
 
